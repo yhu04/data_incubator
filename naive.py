@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import pandas as pd 
 import numpy as np
 
-## corpus should be process before this 
-
 def feature(path_review_label,path_feature):
 	reader_review_label = csv.reader(open(path_review_label))
 	feature_count = {}
@@ -62,45 +60,14 @@ def naive_bayes(naive_prob,positive_doc_num,negative_doc_num,path_review_label):
 		function_value = prior+condition_sum
 		predict_value.append(function_value)
 		labels.append(label)
-		#predict_value.append([function_value,label])
 
 	print 'finish label'
 
 	predict_value,labels=zip(*sorted(zip(predict_value,labels)))
 
 	return list(reversed(list(predict_value))),list(reversed(list(labels)))
-
-def evaluation(funtion_value,label):
-	recall = []
-	precision =[]
-	rank_label = np.array(label)
-	rank_value = np.array(funtion_value)
-	i=0
-
-	while i <= len(rank_value):
-		threshold = funtion_value[i]
-		index = len(rank_value[rank_value>=threshold])
-		TP = sum(rank_label[:index])
-		FN = index-TP
-		FP = sum(rank_label)-TP
-		recall.append(float(TP)/(float(TP)+float(FN)))
-		precision.append(float(TP)/(float(TP)+float(FP)))
-		i = i + 50
-
-	return recall,precision
-
-def plot_curve(recall,precision):
-	plt.clf()
-	plt.plot(recall, precision, label='Precision-Recall curve')
-	plt.xlabel('Recall')
-	plt.ylabel('Precision')
-	plt.ylim([0.0, 1.05])
-	plt.xlim([0.0, 1.0])
-	plt.title('Precision-Recall Curve')
-	plt.savefig('precision_recall_curve_0.1.png')
-
+	
 def main():
-	#40744 11110 29634
 	positive_doc_num = 29634
 	negative_doc_num = 11110
 	path_review = '/Users/Constance/Desktop/data_incubator/corpus_label.csv'
@@ -116,13 +83,6 @@ def main():
 		writer = csv.writer(output)
 		for token in naive_prob:
 			writer.writerow([token,naive_prob[token]['log_ratio']])
-	
-	#predict_value,labels = naive_bayes(naive_prob,float(positive_doc_num),float(negative_doc_num),path_review)
-	#print'naive bayes'
-
-	#recall,precision = evaluation(predict_value,labels)
-	#print'recall precision'
-	#plot_curve(recall,precision)
 
 if __name__ == '__main__':
 	main()	
