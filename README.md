@@ -1,2 +1,2 @@
 # data_incubator
-Frist plot for the project 
+plots for the project 
